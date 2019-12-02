@@ -1,0 +1,119 @@
+{
+    "common": {
+        "name": "exchangerates",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Exchange rates",
+        "titleLang": {
+            "en": "Exchange rates",
+            "de": "Wechselkurse",
+            "ru": "Курсы валют",
+            "pt": "Taxas de câmbio",
+            "nl": "Wisselkoersen",
+            "fr": "Taux d'échange",
+            "it": "Tassi di cambio",
+            "es": "Los tipos de cambio",
+            "pl": "Kurs wymiany",
+            "zh-cn": "汇率"
+        },
+        "desc": {
+            "en": "Exchange rates Central Bank of Russia",
+            "de": "Wechselkurse Zentralbank Russlands",
+            "ru": "Курсы валют Центрального Банка России",
+            "pt": "Taxas de câmbio Banco Central da Rússia",
+            "nl": "Wisselkoersen Centrale Bank van Rusland",
+            "fr": "Taux de change Banque centrale de Russie",
+            "it": "Tassi di cambio Banca centrale della Russia",
+            "es": "Tipos de cambio Banco Central de Rusia",
+            "pl": "Kursy walut Centralny Bank Rosji",
+            "zh-cn": "汇率俄罗斯中央银行"
+        },
+        "authors": [
+            "instalator <vvvalt@mail.ru>"
+        ],
+        "keywords": [
+            "Exchange rates",
+            "currency"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "exchangerates.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/instalator/ioBroker.exchangerates/master/admin/exchangerates.png",
+        "readme": "https://github.com/instalator/ioBroker.exchangerates/blob/master/README.md",
+        "loglevel": "info",
+        "restartAdapters": [
+            "vis"
+        ],
+        "localLink": "%web_protocol%://%ip%:%web_port%/vis/edit.html",
+        "mode": "daemon",
+        "type": "misc-data",
+        "compact": true,
+        "materialize": true,
+        "materializeTab": true,
+        "adminTab": {
+            "singleton": true,
+            "name": {
+                "en": "Exchange rates",
+                "de": "Wechselkurse",
+                "ru": "Курсы валют",
+                "pt": "Taxas de câmbio",
+                "nl": "Wisselkoersen",
+                "fr": "Taux d'échange",
+                "it": "Tassi di cambio",
+                "es": "Los tipos de cambio",
+                "pl": "Kurs wymiany",
+                "zh-cn": "汇率"
+            },
+            "link": "",
+            "fa-icon": "info"
+        },
+        "supportCustoms": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            },
+            "vis"
+        ]
+    },
+    "native": {
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Update exchange rates",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
