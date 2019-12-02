@@ -9,8 +9,7 @@ nbproject
 iobroker.*.tgz
 .eslintrc.json
 Thumbs.db
-main.test.js
-tsconfig.json
+
 # i18n intermediate files
 admin/i18n/flat.txt
 admin/i18n/*/flat.txt

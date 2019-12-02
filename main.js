@@ -1,7 +1,7 @@
 'use strict';
 const utils = require('@iobroker/adapter-core');
 const request = require('request');
-let adapter, interval;
+let adapter, interval = null;
 const url = 'https://www.cbr-xml-daily.ru/daily_json.js';
 
 function startAdapter(options){
@@ -89,7 +89,7 @@ function getCourses(){
                     setStates({name: 'Date', desc: 'Данные на дату', val: obj.Date});
                     setStates({name: 'Timestamp', desc: 'Обновлено', val: obj.Timestamp});
                     obj = obj.Valute;
-                    for (let key in obj) {
+                    for (const key in obj) {
                         if (!Object.hasOwnProperty.call(obj, key)) continue;
                         obj[key].Value = parseFloat(obj[key].Value / parseInt(obj[key].Nominal)).toFixed(2);
                         obj[key].Previous = parseFloat(obj[key].Previous / parseInt(obj[key].Nominal)).toFixed(2);
