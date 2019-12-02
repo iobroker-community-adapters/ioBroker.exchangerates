@@ -7,7 +7,8 @@ const url = 'https://www.cbr-xml-daily.ru/daily_json.js';
 function startAdapter(options){
     return adapter = utils.adapter(Object.assign({}, options, {
         name:         'exchangerates',
-        ready:        main, // Main method defined below for readability
+        systemConfig: true,
+        ready:        main,
         unload:       (callback) => {
             try {
                 adapter.log.info('cleaned everything up...');
@@ -37,13 +38,13 @@ function setStates(obj){
     adapter.getState(obj.name, function (err, state){
         if (err || !state){
             let type = 'number';
-            if(obj.name === 'Date' || obj.name === 'Timestamp') type = 'string';
+            if (obj.name === 'Date' || obj.name === 'Timestamp') type = 'string';
             adapter.setObject(obj.name, {
                 type:   'state',
                 common: {
-                    name: obj.desc,
-                    desc: obj.desc,
-                    type: type,
+                    name:  obj.desc,
+                    desc:  obj.desc,
+                    type:  type,
                     read:  true,
                     write: false
                 },
@@ -95,7 +96,11 @@ function getCourses(){
                         setDev({name: key, desc: obj[key].Name, code: obj[key].NumCode}, function (){
                             setStates({name: key + '.Current', desc: 'Текущий курс', val: obj[key].Value});
                             setStates({name: key + '.Previous', desc: 'Предыдущий курс', val: obj[key].Previous});
-                            setStates({name: key + '.Difference', desc: 'Разница в курсах', val: parseFloat(obj[key].Value - obj[key].Previous).toFixed(2)});
+                            setStates({
+                                name: key + '.Difference',
+                                desc: 'Разница в курсах',
+                                val:  parseFloat(obj[key].Value - obj[key].Previous).toFixed(2)
+                            });
                         });
                     }
                     adapter.log.debug('Exchange Rates Updated');
@@ -109,7 +114,7 @@ function getCourses(){
 }
 
 function main(){
-    if (!adapter.config) return;
+    if (!adapter.systemConfig) return;
     adapter.setState('info.connection', false, true);
     getCourses();
     interval = setInterval(function (){
