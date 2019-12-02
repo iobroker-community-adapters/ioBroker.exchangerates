@@ -109,7 +109,7 @@ function getCourses(){
 }
 
 function main(){
-    //if (!adapter.systemConfig) return;
+    if (!adapter.config) return;
     adapter.setState('info.connection', false, true);
     getCourses();
     interval = setInterval(function (){
