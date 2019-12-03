@@ -1,5 +1,4 @@
 <html>
-
 <head>
     <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
     <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
@@ -10,53 +9,30 @@
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <script type="text/javascript" src="words.js"></script>
-
-    <script type="text/javascript">
-        function load(settings, onChange){
-            if (!settings) return;
-            $('.value').each(function (){
-                var $key = $(this);
-                var id = $key.attr('id');
-                if ($key.attr('type') === 'checkbox'){
-                    $key.prop('checked', settings[id])
-                        .on('change', () => onChange());
-                } else {
-                    $key.val(settings[id])
-                        .on('change', () => onChange())
-                        .on('keyup', () => onChange());
-                }
-            });
-            onChange(false);
-            if (M) M.updateTextFields();
-        }
-
-        function save(callback){
-            var obj = {};
-            $('.value').each(function (){
-                var $this = $(this);
-                if ($this.attr('type') === 'checkbox'){
-                    obj[$this.attr('id')] = $this.prop('checked');
-                } else {
-                    obj[$this.attr('id')] = $this.val();
-                }
-            });
-            callback(obj);
-        }
-    </script>
-
+    <script type="text/javascript" src="admin.js"></script>
 </head>
-
 <body>
-
 <div class="m adapter-container">
-
     <div class="row">
         <div class="col s12 m4 l2">
             <img src="exchangerates.png" class="logo" alt="logo">
         </div>
     </div>
+    <div class="row col m12">
+        <div class="input-field col s3">
+            <select id="source" class="value">
+                <option value="1" class="translate">cbr</option>
+                <option value="2" class="translate">ecb</option>
+            </select>
+            <label class="translate">source</label>
+        </div>
+    </div>
+    <div class="row col m12">
+		<div id="curlist" class="col">
+	        <!--<input id="cur" type="checkbox" class="value"/>-->
+	        <!--<label for="cur"><span class="translate" data-lang="cur">cur</span></label>-->
+		</div>
+    </div>
 </div>
-
 </body>
-
 </html>

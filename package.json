@@ -1,25 +1,39 @@
 {
-  "name": "iobroker.exchangerates",
-  "version": "0.0.1",
-  "description": "Exchange rates Central Bank of Russia",
+  "_from": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1",
+  "_id": "iobroker.exchangerates@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-1MLlrLsfzFKBrPRmvPi1yGx6mqc0/FnYCiEm9f6C9iPm0SD+8QNz8Hebrgy5/jnaWt3T7Qy+A9nYi3K3JqwsVw==",
+  "_location": "/iobroker.exchangerates",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1",
+    "rawSpec": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1",
+    "saveSpec": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1",
+    "fetchSpec": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1",
+  "_shasum": "834a4ba857c58745ba92ab19be8dedcaed5a5ac7",
+  "_spec": "https://github.com/instalator/ioBroker.exchangerates/tarball/c78c148d8317b3c52ef7946025d97e7630d0fef1",
+  "_where": "/opt/iobroker",
   "author": {
     "name": "instalator",
     "email": "vvvalt@mail.ru"
   },
-  "homepage": "https://github.com/instalator/ioBroker.exchangerates",
-  "license": "MIT",
-  "keywords": [
-    "Exchange rates",
-    "currency"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/instalator/ioBroker.exchangerates"
+  "bugs": {
+    "url": "https://github.com/instalator/ioBroker.exchangerates/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
-    "request": "^2.88.0"
+    "xml2js": "^0.4.22"
   },
+  "deprecated": false,
+  "description": "Exchange rates",
   "devDependencies": {
     "@iobroker/testing": "^1.3.0",
     "@types/chai": "^4.2.5",
@@ -40,17 +54,25 @@
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0"
   },
+  "homepage": "https://github.com/instalator/ioBroker.exchangerates",
+  "keywords": [
+    "Exchange rates",
+    "currency"
+  ],
+  "license": "MIT",
   "main": "main.js",
+  "name": "iobroker.exchangerates",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instalator/ioBroker.exchangerates.git"
+  },
   "scripts": {
+    "lint": "eslint",
+    "test": "npm run test:js && npm run test:package",
+    "test:integration": "mocha test/integration --exit",
     "test:js": "mocha --opts test/mocha.custom.opts",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
-    "lint": "eslint"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/instalator/ioBroker.exchangerates/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "0.0.1"
 }

@@ -12,9 +12,9 @@
 
 ## exchangerates adapter for ioBroker
 
-Exchange rates Central Bank of Russia.
+Exchange rates Central Bank of Russia or European Central Bank.
 
-Курсы валют ЦБ РФ в Вашем ioBroker. 
+Курсы валют ЦБ РФ или Европейского ЦБ в Вашем ioBroker. 
 
 [Курсы ЦБ РФ в XML и JSON, API](https://www.cbr-xml-daily.ru)
 
