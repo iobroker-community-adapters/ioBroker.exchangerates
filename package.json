@@ -35,18 +35,7 @@
   "deprecated": false,
   "description": "Exchange rates",
   "devDependencies": {
-    "@iobroker/testing": "^1.1.10",
-    "chai": "^4.2.0",
-    "grunt": "^1.0.1",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-compress": "^1.4.3",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-exec": "^3.0.0",
-    "grunt-http": "^2.2.0",
-    "grunt-jscs": "^3.0.1",
-    "grunt-replace": "^1.0.1",
-    "mocha": "^6.0.2"
+    "@iobroker/testing": "^1.1.10"
   },
   "homepage": "https://github.com/instalator/ioBroker.exchangerates",
   "keywords": [
