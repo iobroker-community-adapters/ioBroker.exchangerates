@@ -26,7 +26,7 @@ systemDictionary = {
         'pl':    'Instancja',
         'zh-cn': '例'
     },
-    'cbr':                            {
+    'CBR':                            {
         'en':    'cbr',
         'de':    'cbr',
         'ru':    'ЦБ России',
@@ -38,7 +38,7 @@ systemDictionary = {
         'it':    'cbr',
         'zh-cn': 'cbr'
     },
-    'ecb':                            {
+    'ECB':                            {
         'en':    'ecb',
         'de':    'ecb',
         'ru':    'Европейский ЦБ',
@@ -49,6 +49,18 @@ systemDictionary = {
         'pl':    'ecb',
         'it':    'ecb',
         'zh-cn': 'ecb'
+    },
+    'POL':                            {
+        'en':    'poloniex.com',
+        'de':    'poloniex.com',
+        'ru':    'poloniex.com',
+        'pt':    'poloniex.com',
+        'nl':    'poloniex.com',
+        'fr':    'poloniex.com',
+        'es':    'poloniex.com',
+        'pl':    'poloniex.com',
+        'it':    'poloniex.com',
+        'zh-cn': 'poloniex.com'
     },
     'source':                         {
         'en':    'source',
