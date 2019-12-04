@@ -2,12 +2,15 @@
 const utils = require('@iobroker/adapter-core');
 const https = require('https');
 const xml2js = require('xml2js');
+const opt = require('./lib/currencies.js');
 let adapter, interval = null;
+let lang = 'ru';
 
-const urls = {
-    1: 'https://www.cbr-xml-daily.ru/daily_json.js',
-    2: 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
-};
+const source = [
+    {name: 'CBR', parser: parseCBR, url: 'www.cbr-xml-daily.ru/daily_json.js'},
+    {name: 'ECB', parser: parseECB, url: 'www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'},
+    {name: 'POL', parser: parsePOL, url: 'www.poloniex.com/public?command=returnTicker'}
+];
 
 function startAdapter(options){
     return adapter = utils.adapter(Object.assign({}, options, {
@@ -30,7 +33,7 @@ function startAdapter(options){
             if (typeof obj === 'object' && obj.command){
                 adapter.log.debug(`message ******* ${JSON.stringify(obj)}`);
                 if (obj.command === 'getOptions'){
-                    obj.callback && adapter.sendTo(obj.from, obj.command, curOpt, obj.callback);
+                    obj.callback && adapter.sendTo(obj.from, obj.command, opt.currencies, obj.callback);
                 }
                 if (obj.command === 'delObject'){
                     delObjects(obj.message, function (){
@@ -46,9 +49,10 @@ function startAdapter(options){
 
 function setStates(obj){
     adapter.getState(obj.name, function (err, state){
+        //adapter.log.error('getState - ' + obj.name + ' err = ' + JSON.stringify(err) + ' state = ' + JSON.stringify(state));
         if (err || !state){
             let type = 'number';
-            if (obj.name === 'Date' || obj.name === 'Timestamp') type = 'string';
+            if (obj.name === 'Date') type = 'string';
             adapter.setObject(obj.name, {
                 type:   'state',
                 common: {
@@ -63,7 +67,7 @@ function setStates(obj){
             });
             adapter.setState(obj.name, {val: obj.val, ack: true});
         } else {
-            adapter.log.debug('state.val = ' + state.val + '/ val = ' + obj.val);
+            //adapter.log.error('state.val = ' + state.val + ' / val = ' + obj.val);
             if (state.val !== obj.val){
                 adapter.setState(obj.name, {val: obj.val, ack: true});
             }
@@ -72,783 +76,41 @@ function setStates(obj){
 }
 
 function setDev(obj, cb){
-    const icon = 'img/' + obj.name + '.png';
-    adapter.setObjectNotExists(obj.name, {
-        type:   'channel',
-        common: {name: obj.desc, type: 'counter', icon: icon},
-        native: {id: obj.code}
-    }, () => {
-        adapter.extendObject(obj.name, {common: {name: obj.desc, type: 'counter', icon: icon}});
-    });
-    cb && cb();
-}
+    const ch = obj.name.split('.');
+    let icon = 'img/' + ch[1] + '.png';
+    if (~ch[1].indexOf('_')) icon = 'img/' + ch[1].substring(ch[1].indexOf('_') + 1, ch[1].length) + '.png';
 
+    adapter.setObjectNotExists(ch[0], {
+        type:   'device',
+        common: {name: '', type: 'state'/*, icon: icon*/},
+        native: {/*id: obj.code*/}
+    }, () => {
+        adapter.setObjectNotExists(obj.name, {
+            type:   'channel',
+            common: {name: obj.desc, type: 'state', icon: icon},
+            native: {id: obj.code}
+        }, () => {
+            adapter.extendObject(obj.name, {common: {name: obj.desc, type: 'state', icon: icon}});
+            cb && cb();
+        });
+    });
+}
 
 function delObjects(obj, cb){
-    let source;
-    for (let key in obj) {
-        let cur = key.split('_');
-        source = cur[0];
-        if (!obj[key]){
-            adapter.deleteChannel(cur[1]);
-        }
-    }
-    for (let key2 in curOpt) {
-        if (!~curOpt[key2].source.indexOf(source.toString())){
-            adapter.deleteChannel(key2);
+    for (const key in obj) {
+        if (!Object.hasOwnProperty.call(obj, key)) continue;
+        let src;
+        const srcNum = key.substring(0, key.indexOf('_'));
+        const cur = key.substring(key.indexOf('_') + 1, key.length);
+        //adapter.log.error('isFinite(srcNum) - ' +  isFinite(srcNum));
+        if (!obj[key] && isFinite(srcNum)){
+            src = source[srcNum].name;
+            //adapter.log.error('src - ' +  src + ' cur - ' + cur);
+            adapter.delObject(src + '.' + cur);
         }
     }
     cb && cb();
 }
-
-const words = function (s){
-    const dictionary = {
-        'Current':    {
-            'en':    'myColor',
-            'de':    'meineColor',
-            'ru':    'Текущий курс',
-            'pt':    'minhaCor',
-            'nl':    'mijnKleur',
-            'fr':    'maCouleur',
-            'it':    'mioColore',
-            'es':    'miColor',
-            'pl':    'mójKolor',
-            'zh-cn': '我的颜色'
-        },
-        'Previous':   {
-            'en':    'myColor',
-            'de':    'meineColor',
-            'ru':    'Предыдущий курс',
-            'pt':    'minhaCor',
-            'nl':    'mijnKleur',
-            'fr':    'maCouleur',
-            'it':    'mioColore',
-            'es':    'miColor',
-            'pl':    'mójKolor',
-            'zh-cn': '我的颜色'
-        },
-        'Difference': {
-            'en':    'myColor',
-            'de':    'meineColor',
-            'ru':    'Разница в курсах',
-            'pt':    'minhaCor',
-            'nl':    'mijnKleur',
-            'fr':    'maCouleur',
-            'it':    'mioColore',
-            'es':    'miColor',
-            'pl':    'mójKolor',
-            'zh-cn': '我的颜色'
-        }
-    };
-    return dictionary[s]['ru'];
-};
-
-const curOpt = {
-    AUD: {
-        code:   '036',
-        source: '1,2',
-        desc:   {
-            ru:      'Австралийский доллар',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    AZN: {
-        code:   '944',
-        source: '1',
-        desc:   {
-            ru:      'Азербайджанский манат',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    AMD: {
-        code:   '051',
-        source: '1',
-        desc:   {
-            ru:      'Армянских драмов',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    BYN: {
-        code:   '933',
-        source: '1',
-        desc:   {
-            ru:      'Белорусский рубль',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    EUR: {
-        code:   '978',
-        source: '1',
-        desc:   {
-            ru:      'Евро',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    KZT: {
-        code:   '398',
-        source: '1',
-        desc:   {
-            ru:      'Казахстанских тенге',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    KGS: {
-        code:   '417',
-        source: '1',
-        desc:   {
-            ru:      'Киргизских сомов',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    MDL: {
-        code:   '498',
-        source: '1',
-        desc:   {
-            ru:      'Молдавских леев',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    XDR: {
-        code:   '960',
-        source: '1',
-        desc:   {
-            ru:      'СДР (специальные права заимствования)',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    TJS: {
-        code:   '972',
-        source: '1',
-        desc:   {
-            ru:      'Таджикских сомони',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    TMT: {
-        code:   '934',
-        source: '1',
-        desc:   {
-            ru:      'Новый туркменский манат',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    UZS: {
-        code:   '860',
-        source: '1',
-        desc:   {
-            ru:      'Узбекских сумов',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    UAH: {
-        code:   '980',
-        source: '1',
-        desc:   {
-            ru:      'Украинских гривен',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    USD: {
-        code:   '840',
-        source: '1,2',
-        desc:   {
-            ru:      'Доллар США',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    JPY: {
-        code:   '392',
-        source: '1,2',
-        desc:   {
-            ru:      'Японских иен',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    BGN: {
-        code:   '975',
-        source: '1,2',
-        desc:   {
-            ru:      'Болгарский лев',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    CZK: {
-        code:   '203',
-        source: '1,2',
-        desc:   {
-            ru:      'Чешских крон',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    DKK: {
-        code:   '208',
-        source: '1,2',
-        desc:   {
-            ru:      'Датских крон',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    GBP: {
-        code:   '826',
-        source: '1,2',
-        desc:   {
-            ru:      'Фунт стерлингов Соединенного королевства',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    HUF: {
-        code:   '348',
-        source: '1,2',
-        desc:   {
-            ru:      'Венгерских форинтов',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    PLN: {
-        code:   '985',
-        source: '1,2',
-        desc:   {
-            ru:      'Польский злотый',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    RON: {
-        code:   '946',
-        source: '1,2',
-        desc:   {
-            ru:      'Румынский лей',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    SEK: {
-        code:   '752',
-        source: '1,2',
-        desc:   {
-            ru:      'Шведских крон',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    CHF: {
-        code:   '756',
-        source: '1,2',
-        desc:   {
-            ru:      'Швейцарский франк',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    ISK: {
-        code:   '352',
-        source: '2',
-        desc:   {
-            ru:      'Исландская крона',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    NOK: {
-        code:   '578',
-        source: '1,2',
-        desc:   {
-            ru:      'Норвежских крон',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    HRK: {
-        code:   '191',
-        source: '2',
-        desc:   {
-            ru:      'Хорватская куна',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    RUB: {
-        code:   '643',
-        source: '2',
-        desc:   {
-            ru:      'Российский рубль',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    TRY: {
-        code:   '949',
-        source: '1,2',
-        desc:   {
-            ru:      'Турецкая лира',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    BRL: {
-        code:   '986',
-        source: '1,2',
-        desc:   {
-            ru:      'Бразильский реал',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    CAD: {
-        code:   '124',
-        source: '1,2',
-        desc:   {
-            ru:      'Канадский доллар',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    CNY: {
-        code:   '156',
-        source: '1,2',
-        desc:   {
-            ru:      'Китайских юаней',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    HKD: {
-        code:   '344',
-        source: '1,2',
-        desc:   {
-            ru:      'Гонконгских долларов',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    IDR: {
-        code:   '360',
-        source: '2',
-        desc:   {
-            ru:      'Индонезийская рупия',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    ILS: {
-        code:   '376',
-        source: '2',
-        desc:   {
-            ru:      'Израильский шекель',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    INR: {
-        code:   '356',
-        source: '1,2',
-        desc:   {
-            ru:      'Индийских рупий',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    KRW: {
-        code:   '410',
-        source: '1,2',
-        desc:   {
-            ru:      'Вон Республики Корея',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    MXN: {
-        code:   '484',
-        source: '2',
-        desc:   {
-            ru:      'Мексиканское песо',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    MYR: {
-        code:   '458',
-        source: '2',
-        desc:   {
-            ru:      'Малайзийский ринггит',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    NZD: {
-        code:   '554',
-        source: '2',
-        desc:   {
-            ru:      'Новозеландский доллар',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    PHP: {
-        code:   '608',
-        source: '2',
-        desc:   {
-            ru:      'Филлипинское Песо',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    SGD: {
-        code:   '702',
-        source: '1,2',
-        desc:   {
-            ru:      'Сингапурский доллар',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    THB: {
-        code:   '764',
-        source: '2',
-        desc:   {
-            ru:      'Тайский бат',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    },
-    ZAR: {
-        code:   '710',
-        source: '1,2',
-        desc:   {
-            ru:      'Южноафриканских рэндов',
-            'en':    'name',
-            'de':    'name',
-            'pt':    'name',
-            'nl':    'name',
-            'fr':    'name',
-            'it':    'name',
-            'es':    'name',
-            'pl':    'name',
-            'zh-cn': 'name'
-        }
-    }
-};
 
 function parseCBR(body){
     adapter.log.debug('parseCBR');
@@ -857,26 +119,31 @@ function parseCBR(body){
         if (!obj.Valute.USD.Value || !obj.Valute.EUR.Value){
             adapter.log.error('Error data');
         } else {
-            setStates({name: 'Date', desc: 'Данные на дату', val: obj.Date});
+            const d = obj.Date.split('T');
+            const src = source[0].name;
             obj = obj.Valute;
             for (const key in obj) {
                 if (!Object.hasOwnProperty.call(obj, key)) continue;
-                if (adapter.config['1_' + key]){
+                if (adapter.config['0_' + key]){
                     obj[key].Value = parseFloat(obj[key].Value / parseInt(obj[key].Nominal)).toFixed(4);
                     obj[key].Previous = parseFloat(obj[key].Previous / parseInt(obj[key].Nominal)).toFixed(4);
-                    setDev({name: key, desc: obj[key].Name, code: obj[key].NumCode}, function (){
-                        setStates({name: key + '.Current', desc: words('Current'), val: obj[key].Value});
-                        setStates({name: key + '.Previous', desc: words('Previous'), val: obj[key].Previous});
+                    setDev({name: src + '.' + key, desc: obj[key].Name, code: obj[key].NumCode}, function (){
+                        setStates({name: src + '.Date', desc: opt.words('Date', lang), val: d[0]});
+                        setStates({name: src + '.' + key + '.Current', desc: opt.words('Current', lang), val: obj[key].Value});
                         setStates({
-                            name: key + '.Difference',
-                            desc: words('Difference'),
+                            name: src + '.' + key + '.Previous',
+                            desc: opt.words('Previous', lang),
+                            val:  obj[key].Previous
+                        });
+                        setStates({
+                            name: src + '.' + key + '.Difference',
+                            desc: opt.words('Difference', lang),
                             val:  parseFloat(obj[key].Value - obj[key].Previous).toFixed(4)
                         });
                     });
                 }
             }
             adapter.log.debug('Exchange Rates Updated');
-            adapter.setState('info.connection', false, true);
         }
     } catch (err) {
         adapter.log.error('Parsing error! - ' + JSON.stringify(err));
@@ -888,28 +155,33 @@ function parseECB(body){
     xml2js.parseString(body, {
         explicitArray:     false,
         trim:              true,
-        tagNameProcessors: [item => ((item = item.split(':')), item.length == 2 ? item[1] :item[0])],
+        tagNameProcessors: [item => ((item = item.split(':')), item.length === 2 ? item[1] :item[0])],
         valueProcessors:   [str => !isNaN(str) ? (str % 1 === 0 ? parseInt(str) :parseFloat(str)) :str]
     }, function (err, result){
         const date = result.Envelope.Cube.Cube.$.time;
-        setStates({name: 'Date', desc: 'Данные на дату', val: date});
+        const src = source[1].name;
         adapter.log.debug('parseECB ' + JSON.stringify(result.Envelope.Cube.Cube.Cube));
         const arr = result.Envelope.Cube.Cube.Cube;
-        arr.forEach(function (item, i){
+        arr.forEach(function (item){
             const cur = item.$.currency;
             const val = parseFloat(item.$.rate).toFixed(4);
-            if (adapter.config['2_' + cur]){
-                setDev({name: cur, desc: curOpt[cur].desc.ru, code: curOpt[cur].code}, function (){
-                    setStates({name: cur + '.Current', desc: words('Current'), val: val});
-                    adapter.getState(cur + '.Date', function (err, oldDate){
+            if (adapter.config['1_' + cur]){
+                setDev({name: src + '.' + cur, desc: opt.currencies[cur].desc[lang], code: opt.currencies[cur].code}, function (){
+                    setStates({name: src + '.Date', desc: opt.words('Date', lang), val: date});
+                    setStates({name: src + '.' + cur + '.Current', desc: opt.words('Current', lang), val: val});
+                    adapter.getState(src + '.' + cur + '.Date', function (err, oldDate){
                         if (!err && oldDate){
                             if (oldDate.val !== date){
-                                adapter.getState(cur + '.Date', function (err, state){
+                                adapter.getState(src + '.' + cur + '.Date', function (err, state){
                                     if (!err && oldDate){
-                                        setStates({name: cur + '.Previous', desc: words('Previous'), val: state.val});
                                         setStates({
-                                            name: cur + '.Difference',
-                                            desc: words('Difference'),
+                                            name: src + '.' + cur + '.Previous',
+                                            desc: opt.words('Previous', lang),
+                                            val:  state.val
+                                        });
+                                        setStates({
+                                            name: src + '.' + cur + '.Difference',
+                                            desc: opt.words('Difference', lang),
                                             val:  parseFloat(val - state.val).toFixed(4)
                                         });
                                     }
@@ -923,44 +195,89 @@ function parseECB(body){
     });
 }
 
-function getCourses(source){
-    adapter.log.info('Get exchange rates');
-    const url = urls[source];
-    https.get(url, (res) => {
-        if (res.statusCode !== 200){
-            adapter.log.error('getCourses response statusCode' + res.statusCode);
-            res.resume();
-            return;
-        }
-        res.setEncoding('utf8');
-        let body = '';
-        res.on('data', (chunk) => {
-            body += chunk;
-        });
-        res.on('end', () => {
-            adapter.log.debug('Response ' + JSON.stringify(body));
-            if (source === 1){
-                parseCBR(body);
-            } else if (source === 2){
-                parseECB(body);
+function parsePOL(body){
+    adapter.log.debug('parsePOL');
+    try {
+        const obj = JSON.parse(body);
+        if (!obj.BTC_BCN || !obj.BTC_BAT){
+            adapter.log.error('Error data');
+        } else {
+            const src = source[2].name;
+            for (const key in obj) {
+                if (!Object.hasOwnProperty.call(obj, key)) continue;
+                if (adapter.config['2_' + key]){
+                    const val = parseFloat(obj[key].last).toFixed(8);
+                    //obj[key].Previous = parseFloat(obj[key].Previous / parseInt(obj[key].Nominal)).toFixed(8);
+                    setDev({name: src + '.' + key, desc: opt.currencies[key].desc[lang], code: obj[key].id}, function (){
+                        setStates({name: src + '.Date', desc: opt.words('Date', lang), val: nowTime()});
+                        setStates({name: src + '.' + key + '.Current', desc: opt.words('Current', lang), val: val});
+                        setStates({
+                            name: src + '.' + key + '.percentChange',
+                            desc: opt.words('percentChange', lang),
+                            val:  parseFloat(obj[key].percentChange).toFixed(8)
+                        });
+                    });
+                }
             }
+            adapter.log.debug('Exchange Rates Updated');
+        }
+    } catch (err) {
+        adapter.log.error('Parsing error! - ' + JSON.stringify(err));
+    }
+}
+
+function getCourses(){
+    adapter.log.info('Get exchange rates');
+    source.forEach(function (obj, src){
+        const options = {
+            hostname: obj.url.substring(0, obj.url.indexOf('/')),
+            path: obj.url.substring(obj.url.indexOf('/'), obj.url.length),
+            port: 443,
+            timeout: 5000,
+            method: 'GET'
+        };
+        const req = https.request(options, (res) => {
+            if (res.statusCode !== 200){
+                adapter.log.error('getCourses response statusCode' + res.statusCode);
+                res.resume();
+                return;
+            }
+            res.setEncoding('utf8');
+            let body = '';
+            res.on('data', (chunk) => {
+                body += chunk;
+            });
+            res.on('end', () => {
+                adapter.log.debug('Response ' + JSON.stringify(body));
+                source[src].parser(body);
+            });
         });
-    }).on('error', (e) => {
-        adapter.log.error('ERROR ' + e);
+        req.on('error', (e) => {
+            adapter.log.error(e);
+        });
+        req.on('timeout', () => {
+            adapter.log.error('request timeout');
+        });
+        req.end();
     });
 }
 
-
 function main(){
     if (!adapter.config.source) return;
-    adapter.setState('info.connection', false, true);
-    adapter.log.error('adapter.config.source = ' + adapter.config.source);
-    getCourses(parseInt(adapter.config.source));
+    adapter.setState('info.connection', true, true);
+    getCourses();
     interval = setInterval(function (){
-        adapter.setState('info.connection', true, true);
-        getCourses(parseInt(adapter.config.source));
+        getCourses();
     }, 1800000);
 }
+
+const nowTime = function (){
+    const now = new Date();
+    const day = (now.getDate() < 10 ? '0' :'') + now.getDate();
+    const month = ((now.getMonth() + 1) < 10 ? '0' :'') + (now.getMonth() + 1);
+    const year = now.getFullYear();
+    return year + '-' + month + '-' + day;
+};
 
 if (module.parent){
     module.exports = startAdapter;

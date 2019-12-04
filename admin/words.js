@@ -26,40 +26,52 @@ systemDictionary = {
         'pl':    'Instancja',
         'zh-cn': '例'
     },
-    'cbr':                            {
-        'en':    'cbr',
-        'de':    'cbr',
+    'CBR':                            {
+        'en':    'Central Bank of Russia',
+        'de':    'Central Bank of Russia',
         'ru':    'ЦБ России',
-        'pt':    'cbr',
-        'nl':    'cbr',
-        'fr':    'cbr',
-        'es':    'cbr',
-        'pl':    'cbr',
-        'it':    'cbr',
-        'zh-cn': 'cbr'
+        'pt':    'Central Bank of Russia',
+        'nl':    'Central Bank of Russia',
+        'fr':    'Central Bank of Russia',
+        'es':    'Central Bank of Russia',
+        'pl':    'Central Bank of Russia',
+        'it':    'Central Bank of Russia',
+        'zh-cn': 'Central Bank of Russia'
     },
-    'ecb':                            {
-        'en':    'ecb',
-        'de':    'ecb',
+    'ECB':                            {
+        'en':    'European Central Bank',
+        'de':    'European Central Bank',
         'ru':    'Европейский ЦБ',
-        'pt':    'ecb',
-        'nl':    'ecb',
-        'fr':    'ecb',
-        'es':    'ecb',
-        'pl':    'ecb',
-        'it':    'ecb',
-        'zh-cn': 'ecb'
+        'pt':    'European Central Bank',
+        'nl':    'European Central Bank',
+        'fr':    'European Central Bank',
+        'es':    'European Central Bank',
+        'pl':    'European Central Bank',
+        'it':    'European Central Bank',
+        'zh-cn': 'European Central Bank'
+    },
+    'POL':                            {
+        'en':    'poloniex.com',
+        'de':    'poloniex.com',
+        'ru':    'poloniex.com',
+        'pt':    'poloniex.com',
+        'nl':    'poloniex.com',
+        'fr':    'poloniex.com',
+        'es':    'poloniex.com',
+        'pl':    'poloniex.com',
+        'it':    'poloniex.com',
+        'zh-cn': 'poloniex.com'
     },
     'source':                         {
-        'en':    'source',
-        'de':    'source',
+        'en':    'Source of information',
+        'de':    'Source of information',
         'ru':    'Источник сведений',
-        'pt':    'source',
-        'nl':    'source',
-        'fr':    'source',
-        'es':    'source',
-        'pl':    'source',
-        'it':    'source',
-        'zh-cn': 'source'
+        'pt':    'Source of information',
+        'nl':    'Source of information',
+        'fr':    'Source of information',
+        'es':    'Source of information',
+        'pl':    'Source of information',
+        'it':    'Source of information',
+        'zh-cn': 'Source of information'
     },
 };

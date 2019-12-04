@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "exchangerates",
-    "version": "0.0.1",
+    "version": "0.0.5",
     "news": {
-      "0.0.1": {
+      "0.0.5": {
         "en": "initial release",
         "de": "Erstveröffentlichung",
         "ru": "Начальная версия",
@@ -30,16 +30,16 @@
       "zh-cn": "汇率"
     },
     "desc": {
-      "en": "Exchange rates Central Bank of Russia",
-      "de": "Wechselkurse Zentralbank Russlands",
-      "ru": "Курсы валют Центрального Банка России",
-      "pt": "Taxas de câmbio Banco Central da Rússia",
-      "nl": "Wisselkoersen Centrale Bank van Rusland",
-      "fr": "Taux de change Banque centrale de Russie",
-      "it": "Tassi di cambio Banca centrale della Russia",
-      "es": "Tipos de cambio Banco Central de Rusia",
-      "pl": "Kursy walut Centralny Bank Rosji",
-      "zh-cn": "汇率俄罗斯中央银行"
+      "en": "Exchange rates",
+      "de": "Wechselkurse",
+      "ru": "Курсы валют",
+      "pt": "Taxas de câmbio",
+      "nl": "Wisselkoersen",
+      "fr": "Taux de change",
+      "it": "Tassi di cambio",
+      "es": "Tipos de cambio",
+      "pl": "Kursy walut",
+      "zh-cn": "貨幣匯率"
     },
     "authors": [
       "instalator <vvvalt@mail.ru>"

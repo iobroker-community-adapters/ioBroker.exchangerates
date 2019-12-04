@@ -1,12 +1,11 @@
 let namespace = 'exchangerates.' + instance,
     namespaceLen = namespace.length;
-let lang;
+var lang = 'en';
 let options = {}, setting;
 
 function load(settings, onChange){
-    //if (!settings) return;
     setting = settings;
-    lang = systemLang || 'en';
+    lang = systemLang;
     console.log('///// settings ////// ' + JSON.stringify(settings));
     $('.value').each(function (){
         const $key = $(this);
@@ -30,9 +29,7 @@ function load(settings, onChange){
 
 $(document).ready(function (){
     sockets();
-    //$('.modal').modal();
     $('#source').on('change', selectSource);
-    //$('#source').val(setting.source).select();
     M.updateTextFields();
 });
 
@@ -43,34 +40,20 @@ function getOptions(){
                 showMessage(_(msg.error), _('Error'), 'error_outline');
             } else {
                 options = msg;
-                $('#source').trigger('change');
+                appendSelect();
             }
         }
     });
 }
 
-function selectSource(){
-    const val = $('select#source option:checked').val();
-    $('#curlist').empty();
-    let div = '';
-    for (const key in options) {
-        if (~options[key].source.indexOf(val)){
-            div += '<span style="padding-right: 20px;"><img style="height:24px;vertical-align:sub;" src="img/' + key + '.png" alt="' + key + '" title="' + key + '" ></span>' +
-                '<label for="' + val + '_' + key + '">' +
-                '<input id="' + val + '_' + key + '" type="checkbox" class="value input-field"/>' +
-                '<span class="translate" data-lang="' + options[key].desc[lang] + '">' + options[key].desc[lang] + '</span>' +
-                '</label></br>';
-        }
-    }
-    $('#curlist').html(div);
-
+function saveVal(){
     $('.value').each(function (){
         const $key = $(this);
         const id = $key.attr('id');
         if ($key.attr('type') === 'checkbox'){
             $key.prop('checked', setting[id]).change(function (){
-                $('input').click(function() {
-                    if($(this).is(':checked')){
+                $('input').click(function (){
+                    if ($(this).is(':checked')){
                         $(this).attr('checked', true);
                     } else {
                         $(this).removeAttr('checked');
@@ -81,8 +64,35 @@ function selectSource(){
             });
         }
     });
-    
-    //M.updateTextFields();
+}
+
+function appendSelect(){
+    //console.log('*******************************' + lang);
+    for (let i = 0; i < 3; i++) {
+        let div = '<div id="curlist-' + i + '" class="col" style="display:none" >';
+        for (const key in options) {
+            let img = key;
+            if (~options[key].source.indexOf(i)){
+                if (~key.indexOf('_')) img = key.substring(key.indexOf('_') + 1, key.length);
+                div += '<span style="padding-right:20px;"><img style="height:24px;width:24px;vertical-align:sub;" src="img/' + img + '.png" alt="' + key + '" title="' + key + '" ></span>' +
+                    '<label for="' + i + '_' + key + '">' +
+                    '<input id="' + i + '_' + key + '" type="checkbox" class="value"/>' +
+                    '<span class="translate" data-lang="' + options[key].desc[lang] + '">' + options[key].desc[lang] + '</span>' +
+                    '</label></br>';
+            }
+        }
+        div += '</div>';
+        $('#lists').append(div);
+    }
+    selectSource();
+    saveVal();
+}
+
+function selectSource(){
+    const val = $('select#source option:checked').val();
+    let selector = '#curlist-' + val;
+    $('#lists').children().hide();
+    $(selector).show();
 }
 
 function save(callback){
