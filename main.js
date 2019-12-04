@@ -207,7 +207,6 @@ function parsePOL(body){
                 if (!Object.hasOwnProperty.call(obj, key)) continue;
                 if (adapter.config['2_' + key]){
                     const val = parseFloat(obj[key].last).toFixed(8);
-                    //obj[key].Previous = parseFloat(obj[key].Previous / parseInt(obj[key].Nominal)).toFixed(8);
                     setDev({name: src + '.' + key, desc: opt.currencies[key].desc[lang], code: obj[key].id}, function (){
                         setStates({name: src + '.Date', desc: opt.words('Date', lang), val: nowTime()});
                         setStates({name: src + '.' + key + '.Current', desc: opt.words('Current', lang), val: val});
