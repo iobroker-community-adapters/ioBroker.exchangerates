@@ -1,6 +1,6 @@
 let namespace = 'exchangerates.' + instance,
     namespaceLen = namespace.length;
-var lang = 'en';
+let lang = 'en';
 let options = {}, setting;
 
 function load(settings, onChange){
