@@ -106,6 +106,10 @@ function delObjects(obj, cb){
         if (!obj[key] && isFinite(srcNum)){
             src = source[srcNum].name;
             //adapter.log.error('src - ' +  src + ' cur - ' + cur);
+            adapter.delState(src + '.' + cur + '.Current');
+            adapter.delState(src + '.' + cur + '.Previous');
+            adapter.delState(src + '.' + cur + '.Difference');
+            adapter.delState(src + '.' + cur + '.percentChange');
             adapter.delObject(src + '.' + cur);
         }
     }
