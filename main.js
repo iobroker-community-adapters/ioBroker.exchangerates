@@ -270,10 +270,11 @@ function getCourses(){
 }
 
 function main(){
-    if (!adapter.config.source) return;
+    if (!adapter.systemConfig) return;
     adapter.setState('info.connection', true, true);
     adapter.getForeignObject('system.config', (err, obj) => {
     	lang = obj.common.language;
+    	//adapter.log.error(lang);
     });
     getCourses();
     interval = setInterval(function (){
