@@ -1,73 +1,52 @@
 let namespace = 'exchangerates.' + instance,
     namespaceLen = namespace.length;
 let lang = 'en';
-let options = {}, setting;
+let options = {};
 
 function load(settings, onChange){
-    setting = settings;
+    //console.log('************** ' + JSON.stringify(settings));
     lang = systemLang;
-    console.log('///// settings ////// ' + JSON.stringify(settings));
-    $('.value').each(function (){
-        const $key = $(this);
-        const id = $key.attr('id');
-        if ($key.attr('type') === 'checkbox'){
-            $key.prop('checked', settings[id]).change(function (){
-                onChange();
-            });
-        } else {
-            $key.val(settings[id]).change(function (){
-                onChange();
-            }).keyup(function (){
-                onChange();
-            });
-        }
+    getOptions(function(){
+	    $('.value').each(function (){
+	        const $key = $(this);
+	        const id = $key.attr('id');
+	        if ($key.attr('type') === 'checkbox'){
+	            $key.prop('checked', settings[id]).change(function (){
+	                onChange();
+	            });
+	        } else {
+	            $key.val(settings[id]).change(function (){
+	                onChange();
+	            }).keyup(function (){
+	                onChange();
+	            });
+	        }
+	    });
+	    onChange(false);
+	    $(document).ready(function (){
+		    sockets();
+		    $('#source').val(settings.source).select();
+		    $('#source').on('change', selectSource);
+		    selectSource();
+		    M.updateTextFields();
+		});
     });
-    getOptions();
-    onChange(false);
-    console.log('systemLang - ' + systemLang);
 }
 
-$(document).ready(function (){
-    sockets();
-    $('#source').on('change', selectSource);
-    M.updateTextFields();
-});
-
-function getOptions(){
+function getOptions(cb){
     sendTo(namespace, 'getOptions', {}, function (msg){
         if (msg){
             if (msg.error){
                 showMessage(_(msg.error), _('Error'), 'error_outline');
             } else {
                 options = msg;
-                appendSelect();
+                appendSelect(cb);
             }
         }
     });
 }
 
-function saveVal(){
-    $('.value').each(function (){
-        const $key = $(this);
-        const id = $key.attr('id');
-        if ($key.attr('type') === 'checkbox'){
-            $key.prop('checked', setting[id]).change(function (){
-                $('input').click(function (){
-                    if ($(this).is(':checked')){
-                        $(this).attr('checked', true);
-                    } else {
-                        $(this).removeAttr('checked');
-                    }
-                    $('a.btn-save').removeClass('disabled');
-                    $('a.btn-save-close').removeClass('disabled');
-                });
-            });
-        }
-    });
-}
-
-function appendSelect(){
-    //console.log('*******************************' + lang);
+function appendSelect(cb){
     for (let i = 0; i < 3; i++) {
         let div = '<div id="curlist-' + i + '" class="col" style="display:none" >';
         for (const key in options) {
@@ -84,8 +63,7 @@ function appendSelect(){
         div += '</div>';
         $('#lists').append(div);
     }
-    selectSource();
-    saveVal();
+    cb && cb();
 }
 
 function selectSource(){
@@ -96,7 +74,6 @@ function selectSource(){
 }
 
 function save(callback){
-    // example: select elements with class=value and build settings object
     let obj = {};
     $('.value').each(function (){
         var $this = $(this);
@@ -106,6 +83,7 @@ function save(callback){
             obj[$this.attr('id')] = $this.val();
         }
     });
+    
     sendTo(namespace, 'delObject', obj, function (msg){
         if (msg){
             if (msg.error){
@@ -139,6 +117,3 @@ function sockets(){
         }
     });
 }
-
-
-
