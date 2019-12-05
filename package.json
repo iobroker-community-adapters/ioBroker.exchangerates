@@ -53,5 +53,5 @@
     "lint": "npm run lint:ts \"src/**/*.ts\"",
     "lint:ts": "tslint"
   },
-  "version": "0.0.5"
+  "version": "0.0.10"
 }

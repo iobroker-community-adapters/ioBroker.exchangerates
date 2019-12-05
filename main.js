@@ -106,14 +106,14 @@ function delObjects(obj, cb){
         if (!obj[key] && isFinite(srcNum)){
             src = source[srcNum].name;
             //adapter.log.error('src - ' +  src + ' cur - ' + cur);
-            adapter.delState(src + '.' + cur + '.Current', function(){
-            	adapter.delState(src + '.' + cur + '.Previous', function(){
-            		adapter.delState(src + '.' + cur + '.Difference', function(){
-            			adapter.delState(src + '.' + cur + '.percentChange', function(){
-            				adapter.delObject(src + '.' + cur);
-            			});
-            		});
-            	});
+            adapter.delState(src + '.' + cur + '.Current', function (){
+                adapter.delState(src + '.' + cur + '.Previous', function (){
+                    adapter.delState(src + '.' + cur + '.Difference', function (){
+                        adapter.delState(src + '.' + cur + '.percentChange', function (){
+                            adapter.delObject(src + '.' + cur);
+                        });
+                    });
+                });
             });
         }
     }
@@ -137,7 +137,11 @@ function parseCBR(body){
                     obj[key].Previous = parseFloat(obj[key].Previous / parseInt(obj[key].Nominal)).toFixed(4);
                     setDev({name: src + '.' + key, desc: obj[key].Name, code: obj[key].NumCode}, function (){
                         setStates({name: src + '.Date', desc: opt.words('Date', lang), val: d[0]});
-                        setStates({name: src + '.' + key + '.Current', desc: opt.words('Current', lang), val: obj[key].Value});
+                        setStates({
+                            name: src + '.' + key + '.Current',
+                            desc: opt.words('Current', lang),
+                            val:  obj[key].Value
+                        });
                         setStates({
                             name: src + '.' + key + '.Previous',
                             desc: opt.words('Previous', lang),
@@ -174,7 +178,11 @@ function parseECB(body){
             const cur = item.$.currency;
             const val = parseFloat(item.$.rate).toFixed(4);
             if (adapter.config['1_' + cur]){
-                setDev({name: src + '.' + cur, desc: opt.currencies[cur].desc[lang], code: opt.currencies[cur].code}, function (){
+                setDev({
+                    name: src + '.' + cur,
+                    desc: opt.currencies[cur].desc[lang],
+                    code: opt.currencies[cur].code
+                }, function (){
                     setStates({name: src + '.Date', desc: opt.words('Date', lang), val: date});
                     setStates({name: src + '.' + cur + '.Current', desc: opt.words('Current', lang), val: val});
                     adapter.getState(src + '.' + cur + '.Date', function (err, oldDate){
@@ -215,7 +223,11 @@ function parsePOL(body){
                 if (!Object.hasOwnProperty.call(obj, key)) continue;
                 if (adapter.config['2_' + key]){
                     const val = parseFloat(obj[key].last).toFixed(8);
-                    setDev({name: src + '.' + key, desc: opt.currencies[key].desc[lang], code: obj[key].id}, function (){
+                    setDev({
+                        name: src + '.' + key,
+                        desc: opt.currencies[key].desc[lang],
+                        code: obj[key].id
+                    }, function (){
                         setStates({name: src + '.Date', desc: opt.words('Date', lang), val: nowTime()});
                         setStates({name: src + '.' + key + '.Current', desc: opt.words('Current', lang), val: val});
                         setStates({
@@ -238,10 +250,10 @@ function getCourses(){
     source.forEach(function (obj, src){
         const options = {
             hostname: obj.url.substring(0, obj.url.indexOf('/')),
-            path: obj.url.substring(obj.url.indexOf('/'), obj.url.length),
-            port: 443,
-            timeout: 5000,
-            method: 'GET'
+            path:     obj.url.substring(obj.url.indexOf('/'), obj.url.length),
+            port:     443,
+            timeout:  5000,
+            method:   'GET'
         };
         const req = https.request(options, (res) => {
             if (res.statusCode !== 200){
@@ -273,8 +285,8 @@ function main(){
     if (!adapter.systemConfig) return;
     adapter.setState('info.connection', true, true);
     adapter.getForeignObject('system.config', (err, obj) => {
-    	lang = obj.common.language;
-    	//adapter.log.error(lang);
+        lang = obj.common.language;
+        //adapter.log.error(lang);
     });
     getCourses();
     interval = setInterval(function (){

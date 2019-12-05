@@ -6,30 +6,30 @@ let options = {};
 function load(settings, onChange){
     //console.log('************** ' + JSON.stringify(settings));
     lang = systemLang;
-    getOptions(function(){
-	    $('.value').each(function (){
-	        const $key = $(this);
-	        const id = $key.attr('id');
-	        if ($key.attr('type') === 'checkbox'){
-	            $key.prop('checked', settings[id]).change(function (){
-	                onChange();
-	            });
-	        } else {
-	            $key.val(settings[id]).change(function (){
-	                onChange();
-	            }).keyup(function (){
-	                onChange();
-	            });
-	        }
-	    });
-	    onChange(false);
-	    $(document).ready(function (){
-		    sockets();
-		    $('#source').val(settings.source).select();
-		    $('#source').on('change', selectSource);
-		    selectSource();
-		    M.updateTextFields();
-		});
+    getOptions(function (){
+        $('.value').each(function (){
+            const $key = $(this);
+            const id = $key.attr('id');
+            if ($key.attr('type') === 'checkbox'){
+                $key.prop('checked', settings[id]).change(function (){
+                    onChange();
+                });
+            } else {
+                $key.val(settings[id]).change(function (){
+                    onChange();
+                }).keyup(function (){
+                    onChange();
+                });
+            }
+        });
+        onChange(false);
+        $(document).ready(function (){
+            sockets();
+            $('#source').val(settings.source).select();
+            $('#source').on('change', selectSource);
+            selectSource();
+            M.updateTextFields();
+        });
     });
 }
 
@@ -83,7 +83,7 @@ function save(callback){
             obj[$this.attr('id')] = $this.val();
         }
     });
-    
+
     sendTo(namespace, 'delObject', obj, function (msg){
         if (msg){
             if (msg.error){
