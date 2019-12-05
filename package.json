@@ -35,7 +35,9 @@
   "deprecated": false,
   "description": "Exchange rates",
   "devDependencies": {
-    "@iobroker/testing": "^1.1.10"
+    "gulp": "^4.0.2",
+    "mocha": "^6.2.2",
+    "chai": "^4.2.0"
   },
   "homepage": "https://github.com/instalator/ioBroker.exchangerates",
   "keywords": [
