@@ -96,7 +96,7 @@ function setDev(obj, cb){
     });
 }
 
-function delObjects(obj, cb){
+/*function delObjects(obj, cb){
     for (const key in obj) {
         if (!Object.hasOwnProperty.call(obj, key)) continue;
         let src;
@@ -118,6 +118,28 @@ function delObjects(obj, cb){
         }
     }
     cb && cb();
+}*/
+
+function delObjects(obj, cb){
+    let count = 0;
+    Object.keys(obj).forEach(key => {
+        const srcNum = key.substring(0, key.indexOf('_'));
+        const cur = key.substring(key.indexOf('_') + 1, key.length);
+        //adapter.log.error('isFinite(srcNum) - ' +  isFinite(srcNum));
+
+        if (!obj[key] && isFinite(srcNum)){
+            const src = source[srcNum].name;
+            count++;
+            adapter.log.error('src - ' +  src + ' cur - ' + cur);
+            adapter.delState(src + '.' + cur + '.Current', () =>
+                adapter.delState(src + '.' + cur + '.Previous', () =>
+                    adapter.delState(src + '.' + cur + '.Difference', () =>
+                        adapter.delState(src + '.' + cur + '.percentChange', () =>
+                            // Delete channel
+                            adapter.delObject(src + '.' + cur, () => !--count && cb && cb())))));
+        }
+    });
+    !count && cb && cb();
 }
 
 function parseCBR(body){
