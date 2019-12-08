@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "exchangerates",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "news": {
+      "0.0.11": {
+        "en": "delete widget",
+        "de": "delete widget",
+        "ru": "delete widget",
+        "pt": "delete widget",
+        "nl": "delete widget",
+        "fr": "delete widget",
+        "it": "delete widget",
+        "es": "delete widget",
+        "pl": "delete widget",
+        "zh-cn": "delete widget"
+      },
       "0.0.10": {
         "en": "fixed error",
         "de": "fixed error",
@@ -70,7 +82,6 @@
     "readme": "https://github.com/instalator/ioBroker.exchangerates/blob/master/README.md",
     "loglevel": "info",
     "restartAdapters": [
-      "vis"
     ],
     "localLink": "%web_protocol%://%ip%:%web_port%/vis/edit.html",
     "mode": "daemon",
