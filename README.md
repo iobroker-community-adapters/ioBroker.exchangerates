@@ -31,3 +31,7 @@ Exchange rates Central Bank of Russia and European Central Bank and more...
 
 ### 0.0.1
 * (instalator) initial
+
+MIT License
+
+Copyright (c) 2019 instalator <vvvalt@mail.ru>
