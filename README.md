@@ -33,7 +33,7 @@ Exchange rates Central Bank of Russia and European Central Bank and more...
 * (instalator) initial
 
 ## License
-MIT License
+The MIT License (MIT)
 
 Copyright (c) 2019 instalator <vvvalt@mail.ru>
 
