@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "exchangerates",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "news": {
+      "0.0.12": {
+        "en": "fixed getObject\nfixed compact mode",
+        "de": "fixed getObject\nfixed compact mode",
+        "ru": "fixed getObject\nfixed compact mode",
+        "pt": "fixed getObject\nfixed compact mode",
+        "nl": "fixed getObject\nfixed compact mode",
+        "fr": "fixed getObject\nfixed compact mode",
+        "it": "fixed getObject\nfixed compact mode",
+        "es": "fixed getObject\nfixed compact mode",
+        "pl": "fixed getObject\nfixed compact mode",
+        "zh-cn": "fixed getObject\nfixed compact mode"
+      },
       "0.0.11": {
         "en": "delete widget",
         "de": "delete widget",
@@ -83,29 +95,11 @@
     "loglevel": "info",
     "restartAdapters": [
     ],
-    "localLink": "%web_protocol%://%ip%:%web_port%/vis/edit.html",
     "mode": "daemon",
     "type": "misc-data",
     "compact": true,
     "materialize": true,
     "materializeTab": true,
-    "adminTab": {
-      "singleton": true,
-      "name": {
-        "en": "Exchange rates",
-        "de": "Wechselkurse",
-        "ru": "Курсы валют",
-        "pt": "Taxas de câmbio",
-        "nl": "Wisselkoersen",
-        "fr": "Taux d'échange",
-        "it": "Tassi di cambio",
-        "es": "Los tipos de cambio",
-        "pl": "Kurs wymiany",
-        "zh-cn": "汇率"
-      },
-      "link": "",
-      "fa-icon": "info"
-    },
     "dependencies": [
       {
         "js-controller": ">=1.4.2"

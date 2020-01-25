@@ -18,6 +18,7 @@ function startAdapter(options){
         systemConfig: true,
         ready:        main,
         unload:       (callback) => {
+            clearInterval(interval);
             try {
                 adapter.log.info('cleaned everything up...');
                 callback();
@@ -48,7 +49,7 @@ function startAdapter(options){
 }
 
 function setStates(obj){
-    adapter.getState(obj.name, function (err, state){
+    adapter.getObject(obj.name, function (err, state){
         //adapter.log.error('getState - ' + obj.name + ' err = ' + JSON.stringify(err) + ' state = ' + JSON.stringify(state));
         if (err || !state){
             let type = 'number';
@@ -96,30 +97,6 @@ function setDev(obj, cb){
     });
 }
 
-/*function delObjects(obj, cb){
-    for (const key in obj) {
-        if (!Object.hasOwnProperty.call(obj, key)) continue;
-        let src;
-        const srcNum = key.substring(0, key.indexOf('_'));
-        const cur = key.substring(key.indexOf('_') + 1, key.length);
-        //adapter.log.error('isFinite(srcNum) - ' +  isFinite(srcNum));
-        if (!obj[key] && isFinite(srcNum)){
-            src = source[srcNum].name;
-            //adapter.log.error('src - ' +  src + ' cur - ' + cur);
-            adapter.delState(src + '.' + cur + '.Current', function (){
-                adapter.delState(src + '.' + cur + '.Previous', function (){
-                    adapter.delState(src + '.' + cur + '.Difference', function (){
-                        adapter.delState(src + '.' + cur + '.percentChange', function (){
-                            adapter.delObject(src + '.' + cur);
-                        });
-                    });
-                });
-            });
-        }
-    }
-    cb && cb();
-}*/
-
 function delObjects(obj, cb){
     let count = 0;
     Object.keys(obj).forEach(key => {
@@ -130,7 +107,7 @@ function delObjects(obj, cb){
         if (!obj[key] && isFinite(srcNum)){
             const src = source[srcNum].name;
             count++;
-            adapter.log.error('src - ' +  src + ' cur - ' + cur);
+            adapter.log.error('src - ' + src + ' cur - ' + cur);
             adapter.delState(src + '.' + cur + '.Current', () =>
                 adapter.delState(src + '.' + cur + '.Previous', () =>
                     adapter.delState(src + '.' + cur + '.Difference', () =>
