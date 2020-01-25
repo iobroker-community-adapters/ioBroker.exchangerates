@@ -8,6 +8,7 @@ nbproject
 # npm package files
 iobroker.*.tgz
 .eslintrc.json
+.github
 Thumbs.db
 
 # i18n intermediate files
