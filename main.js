@@ -26,10 +26,6 @@ function startAdapter(options){
                 callback();
             }
         },
-        /*objectChange: (id, obj) => {
-        },
-        stateChange:  (id, state) => {
-        },*/
         message:      obj => {
             if (typeof obj === 'object' && obj.command){
                 adapter.log.debug(`message ******* ${JSON.stringify(obj)}`);
