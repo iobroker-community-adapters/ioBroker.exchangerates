@@ -93,8 +93,7 @@
     "extIcon": "https://raw.githubusercontent.com/instalator/ioBroker.exchangerates/master/admin/exchangerates.png",
     "readme": "https://github.com/instalator/ioBroker.exchangerates/blob/master/README.md",
     "loglevel": "info",
-    "restartAdapters": [
-    ],
+    "restartAdapters": [],
     "mode": "daemon",
     "type": "misc-data",
     "compact": true,
