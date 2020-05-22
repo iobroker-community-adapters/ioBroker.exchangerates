@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "exchangerates",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "news": {
+      "0.0.13": {
+        "en": "fixed error POL",
+        "de": "fixed error POL",
+        "ru": "fixed error POL",
+        "pt": "fixed error POL",
+        "nl": "fixed error POL",
+        "fr": "fixed error POL",
+        "it": "fixed error POL",
+        "es": "fixed error POL",
+        "pl": "fixed error POL",
+        "zh-cn": "fixed error POL"
+      },
       "0.0.12": {
         "en": "fixed getObject\nfixed compact mode",
         "de": "fixed getObject\nfixed compact mode",

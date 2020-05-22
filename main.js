@@ -120,7 +120,7 @@ function parseCBR(body){
     try {
         let obj = JSON.parse(body);
         if (!obj.Valute.USD.Value || !obj.Valute.EUR.Value){
-            adapter.log.error('Error data');
+            adapter.log.error('parseCBR Error data');
         } else {
             const d = obj.Date.split('T');
             const src = source[0].name;
@@ -210,8 +210,8 @@ function parsePOL(body){
     adapter.log.debug('parsePOL');
     try {
         const obj = JSON.parse(body);
-        if (!obj.BTC_BCN || !obj.BTC_BAT){
-            adapter.log.error('Error data');
+        if (!obj.BTC_ETH){
+            adapter.log.error('parsePOL Error data');
         } else {
             const src = source[2].name;
             for (const key in obj) {
