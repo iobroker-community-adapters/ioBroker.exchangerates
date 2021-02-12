@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "exchangerates",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "news": {
+      "0.0.14": {
+        "en": "change test",
+        "de": "change test",
+        "ru": "change test",
+        "pt": "change test",
+        "nl": "change test",
+        "fr": "change test",
+        "it": "change test",
+        "es": "change test",
+        "pl": "change test",
+        "zh-cn": "change test"
+      },
       "0.0.13": {
         "en": "fixed error POL",
         "de": "fixed error POL",
@@ -14,54 +26,6 @@
         "es": "fixed error POL",
         "pl": "fixed error POL",
         "zh-cn": "fixed error POL"
-      },
-      "0.0.12": {
-        "en": "fixed getObject\nfixed compact mode",
-        "de": "fixed getObject\nfixed compact mode",
-        "ru": "fixed getObject\nfixed compact mode",
-        "pt": "fixed getObject\nfixed compact mode",
-        "nl": "fixed getObject\nfixed compact mode",
-        "fr": "fixed getObject\nfixed compact mode",
-        "it": "fixed getObject\nfixed compact mode",
-        "es": "fixed getObject\nfixed compact mode",
-        "pl": "fixed getObject\nfixed compact mode",
-        "zh-cn": "fixed getObject\nfixed compact mode"
-      },
-      "0.0.11": {
-        "en": "delete widget",
-        "de": "delete widget",
-        "ru": "delete widget",
-        "pt": "delete widget",
-        "nl": "delete widget",
-        "fr": "delete widget",
-        "it": "delete widget",
-        "es": "delete widget",
-        "pl": "delete widget",
-        "zh-cn": "delete widget"
-      },
-      "0.0.10": {
-        "en": "fixed error",
-        "de": "fixed error",
-        "ru": "fixed error",
-        "pt": "fixed error",
-        "nl": "fixed error",
-        "fr": "fixed error",
-        "it": "fixed error",
-        "es": "fixed error",
-        "pl": "fixed error",
-        "zh-cn": "fixed error"
-      },
-      "0.0.5": {
-        "en": "initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Начальная версия",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "首次出版"
       }
     },
     "title": "Exchange rates",
@@ -119,7 +83,7 @@
     ]
   },
   "native": {
-	"source": 1
+    "source": 1
   },
   "objects": [],
   "instanceObjects": [

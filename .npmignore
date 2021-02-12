@@ -7,14 +7,19 @@ nbproject/
 Thumbs.db
 gulpfile.js
 
+# CI test files
 test/
 travis/
 .travis.yml
 appveyor.yml
 .travis.yaml
 appveyor.yaml
-.github
 
+# Type checking configuration
+tsconfig.json
+tsconfig.*.json
+
+# ESLint configuration
 .eslintrc.json
 .eslintrc.js
 

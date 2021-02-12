@@ -6,7 +6,6 @@
 
 const gulp = require('gulp');
 const fs = require('fs');
-const path = require('path');
 const pkg = require('./package.json');
 const iopackage = require('./io-package.json');
 const version = (pkg && pkg.version) ? pkg.version : iopackage.common.version;
@@ -49,7 +48,6 @@ function lang2data(lang, isFlat) {
     }
 }
 
-const NODE_JS_EXPORT = `if (typeof module !== 'undefined' && module.parent) { module.exports = lovelace_systemDictionary; }\n`;
 function readWordJs(src) {
     try {
         let words;
@@ -58,7 +56,6 @@ function readWordJs(src) {
         } else {
             words = fs.readFileSync(src + fileName).toString();
         }
-        words = words.replace(NODE_JS_EXPORT, '');
         words = words.substring(words.indexOf('{'), words.length);
         words = words.substring(0, words.lastIndexOf(';'));
 
@@ -76,8 +73,9 @@ function padRight(text, totalLength) {
 
 function writeWordJs(data, src) {
     let text = '';
+    text += '/*global systemDictionary:true */\n';
     text += "'use strict';\n\n";
-    text += 'var lovelace_systemDictionary = {\n';
+    text += 'systemDictionary = {\n';
     for (const word in data) {
         if (data.hasOwnProperty(word)) {
             text += '    ' + padRight('"' + word.replace(/"/g, '\\"') + '": {', 50);
@@ -94,10 +92,7 @@ function writeWordJs(data, src) {
             text += line + '},\n';
         }
     }
-    text += '};\n';
-
-    text += NODE_JS_EXPORT;
-
+    text += '};';
     if (fs.existsSync(src + 'js/' + fileName)) {
         fs.writeFileSync(src + 'js/' + fileName, text);
     } else {
@@ -200,7 +195,7 @@ function languagesFlat2words(src) {
     const langs = {};
     const bigOne = {};
     const order = Object.keys(languages);
-    dirs.sort((a, b) => {
+    dirs.sort(function (a, b) {
         const posA = order.indexOf(a);
         const posB = order.indexOf(b);
         if (posA === -1 && posB === -1) {
@@ -224,12 +219,13 @@ function languagesFlat2words(src) {
     const keys = fs.readFileSync(src + 'i18n/flat.txt').toString().split('\n');
 
     for (const lang of dirs) {
-        if (lang === 'flat.txt') {
+        if (lang === 'flat.txt')
             continue;
-        }
         const values = fs.readFileSync(src + 'i18n/' + lang + '/flat.txt').toString().split('\n');
         langs[lang] = {};
-        keys.forEach((word, i) => langs[lang][word] = values[i]);
+        keys.forEach(function (word, i) {
+            langs[lang][word] = values[i];
+        });
 
         const words = langs[lang];
         for (const word in words) {
@@ -253,10 +249,9 @@ function languagesFlat2words(src) {
                     console.warn('Take from actual words.js: ' + w);
                     bigOne[w] = aWords[w];
                 }
-                dirs.forEach(lang => {
-                    if (temporaryIgnore.indexOf(lang) !== -1) {
+                dirs.forEach(function (lang) {
+                    if (temporaryIgnore.indexOf(lang) !== -1)
                         return;
-                    }
                     if (!bigOne[w][lang]) {
                         console.warn('Missing "' + lang + '": ' + w);
                     }
@@ -274,7 +269,7 @@ function languages2words(src) {
     const langs = {};
     const bigOne = {};
     const order = Object.keys(languages);
-    dirs.sort((a, b) => {
+    dirs.sort(function (a, b) {
         const posA = order.indexOf(a);
         const posB = order.indexOf(b);
         if (posA === -1 && posB === -1) {
@@ -295,11 +290,9 @@ function languages2words(src) {
             return 0;
         }
     });
-
     for (const lang of dirs) {
-        if (lang === 'flat.txt') {
+        if (lang === 'flat.txt')
             continue;
-        }
         langs[lang] = fs.readFileSync(src + 'i18n/' + lang + '/translations.json').toString();
         langs[lang] = JSON.parse(langs[lang]);
         const words = langs[lang];
@@ -324,10 +317,9 @@ function languages2words(src) {
                     console.warn('Take from actual words.js: ' + w);
                     bigOne[w] = aWords[w];
                 }
-                dirs.forEach(lang => {
-                    if (temporaryIgnore.indexOf(lang) !== -1) {
+                dirs.forEach(function (lang) {
+                    if (temporaryIgnore.indexOf(lang) !== -1)
                         return;
-                    }
                     if (!bigOne[w][lang]) {
                         console.warn('Missing "' + lang + '": ' + w);
                     }
@@ -347,52 +339,39 @@ async function translateNotExisting(obj, baseText, yandex) {
     }
 
     if (t) {
-        for (const l in languages) {
+        for (let l in languages) {
             if (!obj[l]) {
-                const time = Date.now();
+                const time = new Date().getTime();
                 obj[l] = await translate(t, l, yandex);
-                console.log('en -> ' + l + ' ' + (Date.now() - time) + ' ms');
+                console.log('en -> ' + l + ' ' + (new Date().getTime() - time) + ' ms');
             }
         }
     }
 }
 
-function filesWalk(folder, func) {
-    const files = fs.readdirSync(folder);
-    files.forEach(file => {
-        const fullPath = path.join(folder, file);
-        const stat = fs.statSync(fullPath);
-        if (stat.isDirectory()) {
-            filesWalk(fullPath, func);
-        } else {
-            func(fullPath);
-        }
-    });
-}
-
 //TASKS
 
-gulp.task('adminWords2languages', done => {
+gulp.task('adminWords2languages', function (done) {
     words2languages('./admin/');
     done();
 });
 
-gulp.task('adminWords2languagesFlat', done => {
+gulp.task('adminWords2languagesFlat', function (done) {
     words2languagesFlat('./admin/');
     done();
 });
 
-gulp.task('adminLanguagesFlat2words', done => {
+gulp.task('adminLanguagesFlat2words', function (done) {
     languagesFlat2words('./admin/');
     done();
 });
 
-gulp.task('adminLanguages2words', done => {
+gulp.task('adminLanguages2words', function (done) {
     languages2words('./admin/');
     done();
 });
 
-gulp.task('updatePackages', done => {
+gulp.task('updatePackages', function (done) {
     iopackage.common.version = pkg.version;
     iopackage.common.news = iopackage.common.news || {};
     if (!iopackage.common.news[pkg.version]) {
@@ -417,7 +396,7 @@ gulp.task('updatePackages', done => {
     done();
 });
 
-gulp.task('updateReadme', done => {
+gulp.task('updateReadme', function (done) {
     const readme = fs.readFileSync('README.md').toString();
     const pos = readme.indexOf('## Changelog\n');
     if (pos !== -1) {
@@ -438,11 +417,11 @@ gulp.task('updateReadme', done => {
             fs.writeFileSync('README.md', readmeStart + '### ' + version + ' (' + date + ')\n' + (news ? news + '\n\n' : '\n') + readmeEnd);
         }
     }
-
     done();
 });
 
-gulp.task('translate', async function () {
+gulp.task('translate', async function (done) {
+
     let yandex;
     const i = process.argv.indexOf('--yandex');
     if (i > -1) {
@@ -452,12 +431,10 @@ gulp.task('translate', async function () {
     if (iopackage && iopackage.common) {
         if (iopackage.common.news) {
             console.log('Translate News');
-            for (const k in iopackage.common.news) {
-                if (iopackage.common.news.hasOwnProperty(k)) {
-                    console.log('News: ' + k);
-                    const nw = iopackage.common.news[k];
-                    await translateNotExisting(nw, null, yandex);
-                }
+            for (let k in iopackage.common.news) {
+                console.log('News: ' + k);
+                let nw = iopackage.common.news[k];
+                await translateNotExisting(nw, null, yandex);
             }
         }
         if (iopackage.common.titleLang) {
@@ -470,15 +447,15 @@ gulp.task('translate', async function () {
         }
 
         if (fs.existsSync('./admin/i18n/en/translations.json')) {
-            const enTranslations = require('./admin/i18n/en/translations.json');
-            for (const l in languages) {
+            let enTranslations = require('./admin/i18n/en/translations.json');
+            for (let l in languages) {
                 console.log('Translate Text: ' + l);
                 let existing = {};
                 if (fs.existsSync('./admin/i18n/' + l + '/translations.json')) {
                     existing = require('./admin/i18n/' + l + '/translations.json');
                 }
-                for (const t in enTranslations) {
-                    if (enTranslations.hasOwnProperty(t) && !existing[t]) {
+                for (let t in enTranslations) {
+                    if (!existing[t]) {
                         existing[t] = await translate(enTranslations[t], l, yandex);
                     }
                 }
@@ -491,78 +468,6 @@ gulp.task('translate', async function () {
 
     }
     fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 4));
-});
-
-gulp.task('rename', done => {
-    filesWalk(__dirname + '/hass_frontend', fileName => {
-        if (fileName.endsWith('.js') || fileName.endsWith('.html') || fileName.endsWith('.json')) {
-            const text = fs.readFileSync(fileName).toString('utf-8');
-            let newText = text.replace(/Home Assistant/g, 'ioBroker');
-            newText = newText.replace('https://www.home-assistant.io/images/merchandise/shirt-frontpage.png', '/images/image.jpg');
-            newText = newText.replace('https://www.home-assistant.io', 'https://embed.windy.com/embed2.html?lat=32.487&lon=-84.023&zoom=5&level=surface&overlay=rain&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=32.487&detailLon=--84.023&metricWind=default&metricTemp=default&radarRange=-1');
-            if (fileName.endsWith('index.html')) {
-                let m = newText.match(/[^"]<script[^>]*>[^\n]/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text[0] + '\n' + text.substring(1, text.length - 1) + '\n' + text[text.length - 1]));
-
-                m = newText.match(/[^\n]<\/script>[^\n]/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace('</script>', '\n</script>\n')));
-
-                /* // remove absolute paths, but it does not work
-                m = newText.match(/src='\/[^']+'/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace("'/", "'")));
-
-                m = newText.match(/import\s"\/[^"]+"/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace('"/', '"')));
-
-                m = newText.match(/href="\/[^"]+"/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace('"/', '"')));
-
-                m = newText.match(/href='\/[^']+'/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace("'/", "'")));
-
-                m = newText.match(/content="\/[^"]+"/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace('"/', '"')));
-                m = newText.match(/customPanelJS = "\/[^"]+"/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace('"/', '"')));
-                m = newText.match(/_ls\("\/[^"]+"/g);
-                m && m.forEach(text =>
-                    newText = newText.replace(text, text.replace('"/', '"')));
-                 */
-
-                newText = newText.replace(/\n\n\n/g, '\n');
-                newText = newText.replace(/\n\n/g, '\n');
-                newText = newText.replace(`<script type="module" crossorigin="use-credentials" src="{{ extra_module }}">
-</script>`, '<script type="module" crossorigin="use-credentials" src="{{ extra_module }}"></script>');
-                newText = newText.replace('{% for extra_url in extra_urls -%}<link rel="import" href="{{ extra_url }}" async>{% endfor -%}', '');
-                newText = newText.replace(`{% for extra_url in extra_urls -%}
-    <link rel="import" href="{{ extra_url }}" async />
-    {% endfor -%}`, '');
-                newText = newText.replace('</script>{% endfor -%}', '</script>\n{% endfor -%}');
-            }
-
-            if (newText !== text) {
-                console.log(`File ${fileName} patched.`);
-                fs.writeFileSync(fileName, newText);
-            }
-        } else if (fileName.endsWith('.py') || fileName.endsWith('.gz') || fileName === '.DS_Store') {
-            console.log(`${fileName} deleted`);
-            fs.unlinkSync(fileName);
-        }
-    });
-    if (fs.existsSync(__dirname + '/hass_frontend/images/')) {
-        fs.writeFileSync(__dirname + '/hass_frontend/images/image.jpg', fs.readFileSync(__dirname + '/assets/image.jpg'));
-    } else {
-        fs.writeFileSync(__dirname + '/hass_frontend/static/images/image.jpg', fs.readFileSync(__dirname + '/assets/image.jpg'));
-    }
-    done();
 });
 
 gulp.task('translateAndUpdateWordsJS', gulp.series('translate', 'adminLanguages2words', 'adminWords2languages'));
