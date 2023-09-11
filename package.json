@@ -4,16 +4,17 @@
     "name": "instalator",
     "email": "vvvalt@mail.ru"
   },
+  "description": "Exchange rates",
   "bugs": {
     "url": "https://github.com/instalator/ioBroker.exchangerates/issues"
   },
-  "bundleDependencies": [],
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0",
     "xml2js": "^0.4.22"
   },
-  "deprecated": false,
-  "description": "Exchange rates",
   "devDependencies": {
     "@iobroker/testing": "^4.1.0",
     "@types/chai": "^4.3.6",
