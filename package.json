@@ -6,7 +6,7 @@
   },
   "description": "Exchange rates",
   "bugs": {
-    "url": "https://github.com/instalator/ioBroker.exchangerates/issues"
+    "url": "https://github.com/iobroker-community-aadapters/ioBroker.exchangerates/issues"
   },
   "engines": {
     "node": ">=18"
@@ -43,7 +43,7 @@
     "sinon-chai": "^3.7.0",
     "typescript": "~5.4.5"
   },
-  "homepage": "https://github.com/instalator/ioBroker.exchangerates",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.exchangerates",
   "keywords": [
     "Exchange rates",
     "currency"
@@ -53,7 +53,7 @@
   "name": "iobroker.exchangerates",
   "repository": {
     "type": "git",
-    "url": "https://github.com/instalator/ioBroker.exchangerates.git"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.exchangerates.git"
   },
   "scripts": {
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
