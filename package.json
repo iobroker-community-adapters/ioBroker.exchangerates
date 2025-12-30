@@ -1,9 +1,9 @@
 {
   "version": "0.1.0",
-  "author": {
-    "name": "instalator",
-    "email": "vvvalt@mail.ru"
-  },
+  "author": "instalator <vvvalt@mail.ru>",
+  "contributors": [
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
+  ],
   "description": "Exchange rates",
   "bugs": {
     "url": "https://github.com/iobroker-community-aadapters/ioBroker.exchangerates/issues"

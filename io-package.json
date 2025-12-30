@@ -66,7 +66,8 @@
       "zh-cn": "貨幣匯率"
     },
     "authors": [
-      "instalator <vvvalt@mail.ru>"
+      "instalator <vvvalt@mail.ru>",
+      "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
     ],
     "keywords": [
       "Exchange rates",
@@ -95,12 +96,12 @@
     "dataSource": "poll",
     "dependencies": [
       {
-        "js-controller": ">=5.0.19"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=6.13.16"
+        "admin": ">=7.6.17"
       }
     ]
   },
