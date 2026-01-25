@@ -45,6 +45,7 @@
   },
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.exchangerates",
   "keywords": [
+    "ioBroker",
     "Exchange rates",
     "currency"
   ],
