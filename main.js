@@ -1,6 +1,6 @@
 'use strict';
 const utils = require('@iobroker/adapter-core');
-const https = require('https');
+const https = require('node:https');
 const xml2js = require('xml2js');
 const opt = require('./lib/currencies.js');
 let adapter, interval = null;
