@@ -9,7 +9,7 @@
     "url": "https://github.com/iobroker-community-aadapters/ioBroker.exchangerates/issues"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.1.6",
