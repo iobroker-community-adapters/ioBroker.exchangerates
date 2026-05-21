@@ -39,14 +39,30 @@ describe('admin jsonConfig migration', () => {
             ...Object.keys(jsonConfig.items.ecb.items),
             ...Object.keys(jsonConfig.items.pol.items),
         ].filter(key => /^[012]_/.test(key));
+        const allCurrencyItems = {
+            ...jsonConfig.items.cbr.items,
+            ...jsonConfig.items.ecb.items,
+            ...jsonConfig.items.pol.items,
+        };
 
         const expectedKeys = [];
         Object.entries(currencies).forEach(([currencyCode, currencyConfig]) => {
             currencyConfig.source.split(',').forEach(src => expectedKeys.push(`${src}_${currencyCode}`));
         });
 
-        expect(new Set(configCurrencyKeys).size).to.equal(new Set(expectedKeys).size);
-        expectedKeys.forEach(key => expect(configCurrencyKeys).to.include(key));
+        const actualSorted = [...new Set(configCurrencyKeys)].sort();
+        const expectedSorted = [...new Set(expectedKeys)].sort();
+        expect(actualSorted).to.deep.equal(expectedSorted);
+
+        configCurrencyKeys.forEach(key => {
+            const item = allCurrencyItems[key];
+            expect(item.type).to.equal('checkbox');
+            expect(item.xs).to.equal(12);
+            expect(item.sm).to.equal(6);
+            expect(item.md).to.equal(4);
+            expect(item.lg).to.equal(3);
+            expect(item.xl).to.equal(2);
+        });
     });
 });
 

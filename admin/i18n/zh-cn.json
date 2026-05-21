@@ -1,8 +1,6 @@
 {
-  "CBR": "Central Bank of Russia",
-  "ECB": "European Central Bank",
-  "Instance": "例",
-  "POL": "poloniex.com",
-  "exchangerates adapter settings": "exchangerates的适配器设置",
-  "source": "Source of information"
+    "CBR": "俄罗斯中央银行",
+    "ECB": "欧洲中央银行",
+    "POL": "poloniex.com",
+    "Source of information": "信息来源"
 }

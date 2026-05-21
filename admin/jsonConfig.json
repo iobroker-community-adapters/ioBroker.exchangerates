@@ -3,7 +3,7 @@
   "items": {
     "source": {
       "type": "select",
-      "label": "source",
+      "label": "Source of information",
       "options": [
         {
           "label": "CBR",
