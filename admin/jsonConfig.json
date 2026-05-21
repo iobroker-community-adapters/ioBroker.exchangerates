@@ -1,0 +1,769 @@
+{
+  "type": "panel",
+  "items": {
+    "source": {
+      "type": "select",
+      "label": "source",
+      "options": [
+        {
+          "label": "CBR",
+          "value": 0
+        },
+        {
+          "label": "ECB",
+          "value": 1
+        },
+        {
+          "label": "POL",
+          "value": 2
+        }
+      ],
+      "xs": 12,
+      "sm": 6,
+      "md": 4,
+      "lg": 3,
+      "xl": 3
+    },
+    "cbr": {
+      "type": "panel",
+      "label": "CBR",
+      "hidden": "data.source !== 0",
+      "items": {
+        "section_0": {
+          "type": "staticText",
+          "text": "CBR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
+        },
+        "0_AMD": {
+          "type": "checkbox",
+          "label": "AMD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_AUD": {
+          "type": "checkbox",
+          "label": "AUD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_AZN": {
+          "type": "checkbox",
+          "label": "AZN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_BGN": {
+          "type": "checkbox",
+          "label": "BGN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_BRL": {
+          "type": "checkbox",
+          "label": "BRL",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_BYN": {
+          "type": "checkbox",
+          "label": "BYN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_CAD": {
+          "type": "checkbox",
+          "label": "CAD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_CHF": {
+          "type": "checkbox",
+          "label": "CHF",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_CNY": {
+          "type": "checkbox",
+          "label": "CNY",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_CZK": {
+          "type": "checkbox",
+          "label": "CZK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_DKK": {
+          "type": "checkbox",
+          "label": "DKK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_EUR": {
+          "type": "checkbox",
+          "label": "EUR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_GBP": {
+          "type": "checkbox",
+          "label": "GBP",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_HKD": {
+          "type": "checkbox",
+          "label": "HKD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_HUF": {
+          "type": "checkbox",
+          "label": "HUF",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_INR": {
+          "type": "checkbox",
+          "label": "INR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_JPY": {
+          "type": "checkbox",
+          "label": "JPY",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_KGS": {
+          "type": "checkbox",
+          "label": "KGS",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_KRW": {
+          "type": "checkbox",
+          "label": "KRW",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_KZT": {
+          "type": "checkbox",
+          "label": "KZT",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_MDL": {
+          "type": "checkbox",
+          "label": "MDL",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_NOK": {
+          "type": "checkbox",
+          "label": "NOK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_PLN": {
+          "type": "checkbox",
+          "label": "PLN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_RON": {
+          "type": "checkbox",
+          "label": "RON",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_SEK": {
+          "type": "checkbox",
+          "label": "SEK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_SGD": {
+          "type": "checkbox",
+          "label": "SGD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_TJS": {
+          "type": "checkbox",
+          "label": "TJS",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_TMT": {
+          "type": "checkbox",
+          "label": "TMT",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_TRY": {
+          "type": "checkbox",
+          "label": "TRY",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_UAH": {
+          "type": "checkbox",
+          "label": "UAH",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_USD": {
+          "type": "checkbox",
+          "label": "USD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_UZS": {
+          "type": "checkbox",
+          "label": "UZS",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_XDR": {
+          "type": "checkbox",
+          "label": "XDR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "0_ZAR": {
+          "type": "checkbox",
+          "label": "ZAR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        }
+      }
+    },
+    "ecb": {
+      "type": "panel",
+      "label": "ECB",
+      "hidden": "data.source !== 1",
+      "items": {
+        "section_1": {
+          "type": "staticText",
+          "text": "ECB",
+          "newLine": true,
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
+        },
+        "1_AUD": {
+          "type": "checkbox",
+          "label": "AUD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_BGN": {
+          "type": "checkbox",
+          "label": "BGN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_BRL": {
+          "type": "checkbox",
+          "label": "BRL",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_CAD": {
+          "type": "checkbox",
+          "label": "CAD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_CHF": {
+          "type": "checkbox",
+          "label": "CHF",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_CNY": {
+          "type": "checkbox",
+          "label": "CNY",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_CZK": {
+          "type": "checkbox",
+          "label": "CZK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_DKK": {
+          "type": "checkbox",
+          "label": "DKK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_GBP": {
+          "type": "checkbox",
+          "label": "GBP",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_HKD": {
+          "type": "checkbox",
+          "label": "HKD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_HRK": {
+          "type": "checkbox",
+          "label": "HRK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_HUF": {
+          "type": "checkbox",
+          "label": "HUF",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_IDR": {
+          "type": "checkbox",
+          "label": "IDR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_ILS": {
+          "type": "checkbox",
+          "label": "ILS",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_INR": {
+          "type": "checkbox",
+          "label": "INR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_ISK": {
+          "type": "checkbox",
+          "label": "ISK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_JPY": {
+          "type": "checkbox",
+          "label": "JPY",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_KRW": {
+          "type": "checkbox",
+          "label": "KRW",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_MXN": {
+          "type": "checkbox",
+          "label": "MXN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_MYR": {
+          "type": "checkbox",
+          "label": "MYR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_NOK": {
+          "type": "checkbox",
+          "label": "NOK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_NZD": {
+          "type": "checkbox",
+          "label": "NZD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_PHP": {
+          "type": "checkbox",
+          "label": "PHP",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_PLN": {
+          "type": "checkbox",
+          "label": "PLN",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_RON": {
+          "type": "checkbox",
+          "label": "RON",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_RUB": {
+          "type": "checkbox",
+          "label": "RUB",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_SEK": {
+          "type": "checkbox",
+          "label": "SEK",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_SGD": {
+          "type": "checkbox",
+          "label": "SGD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_THB": {
+          "type": "checkbox",
+          "label": "THB",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_TRY": {
+          "type": "checkbox",
+          "label": "TRY",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_USD": {
+          "type": "checkbox",
+          "label": "USD",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "1_ZAR": {
+          "type": "checkbox",
+          "label": "ZAR",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        }
+      }
+    },
+    "pol": {
+      "type": "panel",
+      "label": "POL",
+      "hidden": "data.source !== 2",
+      "items": {
+        "section_2": {
+          "type": "staticText",
+          "text": "POL",
+          "newLine": true,
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
+        },
+        "2_USDT_BTC": {
+          "type": "checkbox",
+          "label": "USDT_BTC",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "2_USDT_ETH": {
+          "type": "checkbox",
+          "label": "USDT_ETH",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        },
+        "2_USDT_LTC": {
+          "type": "checkbox",
+          "label": "USDT_LTC",
+          "newLine": true,
+          "xs": 12,
+          "sm": 6,
+          "md": 4,
+          "lg": 3,
+          "xl": 2
+        }
+      }
+    }
+  }
+}
