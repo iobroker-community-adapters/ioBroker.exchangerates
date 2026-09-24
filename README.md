@@ -57,6 +57,8 @@ Exchange rates Central Bank of Russia and European Central Bank and more...
 ### 0.0.1
 * (instalator) initial
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 The MIT License (MIT)
 
