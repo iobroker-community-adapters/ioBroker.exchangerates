@@ -90,7 +90,6 @@
     "mode": "daemon",
     "type": "misc-data",
     "compact": true,
-    "materialize": true,
     "materializeTab": true,
     "connectionType": "cloud",
     "dataSource": "poll",
@@ -103,7 +102,10 @@
       {
         "admin": ">=7.6.17"
       }
-    ]
+    ],
+    "adminUI": {
+      "config": "materialize"
+    }
   },
   "native": {
     "source": 1
