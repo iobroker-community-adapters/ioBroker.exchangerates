@@ -30,6 +30,7 @@ Exchange rates Central Bank of Russia and European Central Bank and more...
 - (copilot) Adapter requires node.js >= 22 now
 - (copilot) Adapter requires js-controller >= 6.0.11 now
 - (copilot) Adapter requires admin >= 7.6.17 now
+- (copilot) **ENHANCED**: Migrated admin configuration UI to jsonConfig with short-form i18n translations
 
 ### 0.1.0 (2024-04-15)
 * (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
